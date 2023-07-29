@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { ChatState } from '../Context/ChatProvider'
-import { Box, FormControl, IconButton, Input, Spinner, Text, useToast } from '@chakra-ui/react';
-import { ArrowBackIcon } from '@chakra-ui/icons';
+import { Avatar, Box, Button, FormControl, IconButton, Input, Spinner, Text, useToast } from '@chakra-ui/react';
+import { ArrowBackIcon, ArrowForwardIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { getSender, getSenderName } from '../config/ChatLogics';
 import ProfileModal from './Miscellaneous/ProfileModal';
 import UpdateGroupChatModal from './Miscellaneous/UpdateGroupChatModal';
@@ -59,8 +59,6 @@ const SingleChat = ({fetchAgain, setFetchAgain}) => {
             }
             const { data }  = await APIClient.get(`/api/message/${selectedChat._id}`,config
             );
-
-            console.log("messages ",data);
             setMessages( data);
             setLoading(false);
             socket.emit("join chat", selectedChat._id);
@@ -83,7 +81,6 @@ const SingleChat = ({fetchAgain, setFetchAgain}) => {
         selectedChatCompare = selectedChat;
     },[selectedChat])
 
-    console.log("notification: ", notification)
     useEffect(()=>{
         socket.on("message recieved", (newMessageRecieved)=>{
             if(!selectedChatCompare || selectedChatCompare._id !== newMessageRecieved.chat._id ){
@@ -101,7 +98,9 @@ const SingleChat = ({fetchAgain, setFetchAgain}) => {
     
 
    const sendMessage = async(e)=>{
-        if(e.key === "Enter" && newMessage){
+    // for using enter to send message add this
+    // e.key === "Enter" &&
+        if( newMessage){
             socket.emit('stop typing', selectedChat._id)
             try {
                 const config = {
@@ -117,9 +116,6 @@ const SingleChat = ({fetchAgain, setFetchAgain}) => {
                 },
                 config
                 );
-
-                console.log(data);
-
                 socket.emit("new message",data)
                 setMessages([...messages, data]);
             } catch (error) {
@@ -178,7 +174,15 @@ const SingleChat = ({fetchAgain, setFetchAgain}) => {
                 />
                 {!selectedChat.isGroupChat 
                 ? (<>
-                    {getSenderName(user, selectedChat.users)}
+                     <div style={{display:"flex", justifyContent:"center", alignItems:"center"}}>
+                        <Avatar 
+                            mr={2}
+                            size="md"
+                            cursor={"pointer"}
+                            src={getSender(user, selectedChat.users).pic}
+                        />
+                        {getSenderName(user, selectedChat.users)}
+                     </div>
                     <ProfileModal user={getSender(user, selectedChat.users)} />
                 </>)
                 :(
@@ -220,12 +224,15 @@ const SingleChat = ({fetchAgain, setFetchAgain}) => {
                     />
                 ) : (
                     <>
-                       <div className='messages'> 
+                    <div className='messages'> 
                         {/* messages */}
                         <ScrollableChat messages={messages} />
-                        </div>
+                    </div>
 
-                    <FormControl  onKeyDown={sendMessage} isRequired mt={3} >
+                    <FormControl  
+                    // onKeyDown={sendMessage} 
+                    isRequired mt={3} 
+                    style={{display:"flex"}} >
                         {isTyping ? 
                         <div>
                             <Lottie 
@@ -235,15 +242,33 @@ const SingleChat = ({fetchAgain, setFetchAgain}) => {
                             /> 
                         </div> 
                         :<></> }
-                        <Input 
+                        <Input
+                            style={{backgroundColor:"white", width:"100%"}} 
+
                             variant ="filled"
                             // bg="#E0E0E0"
                             placeholder='Enter a message..'
                             onChange = {typingHandler}
                             value={newMessage}
                         />
-
+                        <IconButton
+                        _hover={{
+                            background: '#38B2AC', // Change the background color on hover.
+                        }} 
+                        display={{base:"flex"}}
+                        width={{sm:"20%", md: "10%", lg:"5%" }}
+                        style={{ position:"absolute", right:"0px", padding:"2px 3px", borderBottomLeftRadius:"0px",borderTopLeftRadius:"0px"}}
+                        icon={<ChevronRightIcon/>}
+                        onClick={sendMessage}
+                        size={15}
+                        bgColor={"#38B2AC"}
+                        fontSize={35}
+                        color={"white"}
+                        />
                     </FormControl>
+                        
+                    
+
                     </>
                 ) }
             </Box>

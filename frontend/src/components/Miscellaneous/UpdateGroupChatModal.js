@@ -48,7 +48,6 @@ const UpdateGroupChatModal = ({fetchAgain, setFetchAgain,fetchMessages}) => {
               chatId: selectedChat._id,
               chatName: groupChatName
             } ,config);
-            console.log(data);
             setSelectedChat(data);
             setFetchAgain(!fetchAgain);
             setRenameLoading(false);
@@ -85,7 +84,6 @@ const UpdateGroupChatModal = ({fetchAgain, setFetchAgain,fetchMessages}) => {
           };
     
           const { data } = await APIClient.get(`/api/user?search=${query}`, config);
-          console.log(data);
           setLoading(false);
           setSearchResult(data);
         } catch (error) {
@@ -102,45 +100,45 @@ const UpdateGroupChatModal = ({fetchAgain, setFetchAgain,fetchMessages}) => {
       };
 
     const handleRemove = async(userToRemove)=>{
-        if( selectedChat.groupAdmin._id !==user._id){
-            toast({
-                title: "Only admins can remove someone!",
-                status: "error",
-                duration: 5000,
-                isClosable: true,
-                position: "bottom",
-              });
-              return;
-        }
+      if(userToRemove._id === user._id || selectedChat.groupAdmin._id === user._id){
         try {
-            setLoading(true)
-            const config = {
-                headers: {
-                  Authorization: `Bearer ${user.token}`,
-                }
-              };
-              const { data } = await APIClient.put(`/api/chat/groupremove`,{
-               chatId: selectedChat._id,
-               userId: userToRemove._id
-              } ,config);
-              console.log(data);
+          setLoading(true)
+          const config = {
+              headers: {
+                Authorization: `Bearer ${user.token}`,
+              }
+            };
+            const { data } = await APIClient.put(`/api/chat/groupremove`,{
+             chatId: selectedChat._id,
+             userId: userToRemove._id
+            } ,config);
 
-              userToRemove._id === user._id ? setSelectedChat():setSelectedChat(data)
-              setFetchAgain(!fetchAgain);
-              fetchMessages();
-              setLoading(false)
-        } catch (error) {
-            console.log(error);
-            toast({
-                title: "Error Occured",
-                description: error.response.data.message,
-                status: "error",
-                duration: 5000,
-                isClosable: true,
-                position: "bottom",
-              });
-              setLoading(false)
-        }
+            userToRemove._id === user._id ? setSelectedChat():setSelectedChat(data)
+            setFetchAgain(!fetchAgain);
+            fetchMessages();
+            setLoading(false)
+      } catch (error) {
+          console.log(error);
+          toast({
+              title: "Error Occured",
+              description: error.response.data.message,
+              status: "error",
+              duration: 5000,
+              isClosable: true,
+              position: "bottom",
+            });
+            setLoading(false)
+      }
+      }else{
+        toast({
+          title: "Only admins can remove someone!",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+          position: "bottom",
+        });
+        return;
+      }
     }
 
     const handleAdduser = async(userToAdd)=>{
@@ -175,7 +173,6 @@ const UpdateGroupChatModal = ({fetchAgain, setFetchAgain,fetchMessages}) => {
                chatId: selectedChat._id,
                userId: userToAdd._id
               } ,config);
-              console.log(data);
               setSelectedChat(data);
               setFetchAgain(!fetchAgain)
               setLoading(false)
@@ -227,6 +224,7 @@ const UpdateGroupChatModal = ({fetchAgain, setFetchAgain,fetchMessages}) => {
                         key={user._id}
                         user={user}
                         handleFunction={() => handleRemove(user)}
+                        isAdmin = {selectedChat.groupAdmin.name === user.name ? true : false }
                       />;
                     })
                 }

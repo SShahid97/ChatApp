@@ -10,10 +10,10 @@ const ChatProvider = ({ children }) => {
   const [notification, setNotification] = useState([]);
 
   const history = useHistory();
-
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-    if (userInfo) setUser(userInfo);
+    if (userInfo) 
+      setUser(userInfo);
 
     if (!userInfo) {
       history.push("/");
@@ -22,9 +22,8 @@ const ChatProvider = ({ children }) => {
 
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-    if (userInfo) setUser(userInfo);
-
-    console.log("userInfo: ", userInfo);
+    if (userInfo) 
+      setUser(userInfo);
     if (!userInfo) {
       history.push("/");
     }

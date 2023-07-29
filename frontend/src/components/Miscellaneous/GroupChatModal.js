@@ -52,7 +52,6 @@ const GroupChatModal = ({ children }) => {
       };
 
       const { data } = await APIClient.get(`/api/user?search=${query}`, config);
-      console.log(data);
       setLoading(false);
       setSearchResult(data);
     } catch (error) {
@@ -91,7 +90,6 @@ const GroupChatModal = ({ children }) => {
         name: groupChatName,
         users: selectedUsers.map(u=>u._id)
       } ,config);
-      console.log(data);
 
       setChats([data, ...chats]);
       onClose();
@@ -128,15 +126,14 @@ const GroupChatModal = ({ children }) => {
       return;
     }
     setSelectedUsers([...selectedUsers, userToAdd]);
-    console.log("selected users ", selectedUsers)
   };
 
 
-  useEffect(()=>{
-    if(selectedUsers.length > 0){
-      console.log(selectedUsers)
-    }
-  },[selectedUsers])
+  // useEffect(()=>{
+  //   if(selectedUsers.length > 0){
+  //     console.log(selectedUsers)
+  //   }
+  // },[selectedUsers])
 
   const handleDelete = (userToDelete) => {
 

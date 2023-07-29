@@ -21,7 +21,6 @@ const MyChats = ({fetchAgain}) => {
       };
 
       const { data } = await APIClient.get("/api/chat", config);
-      console.log(data);
       setChats(data);
     } catch (error) {
       toast({
@@ -89,7 +88,7 @@ const MyChats = ({fetchAgain}) => {
         overflow={"hidden"}
       >
         {chats.length > 0 ? (
-          <Stack overflowY={"scroll"}>
+          <Stack overflowY={"auto"}>
             {chats.map((chat) => {
               return (
                 <Box

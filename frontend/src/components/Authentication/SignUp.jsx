@@ -57,7 +57,7 @@ const SignUp = () => {
           data.append("cloud_name", "doipb3a48")
           APIClient.post("https://api.cloudinary.com/v1_1/doipb3a48/image/upload", data)
             .then((response) => {
-              console.log("Cloudinary response:", response);
+            //   console.log("Cloudinary response:", response);
               setPic(response.data.url.toString());
               setLoading(false);
             //   toast({

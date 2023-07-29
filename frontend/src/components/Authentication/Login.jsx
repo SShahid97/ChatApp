@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import {useHistory} from 'react-router-dom'
 import {ViewIcon,ViewOffIcon} from '@chakra-ui/icons';
 import { APIClient } from '../../service/ApiClient';
+import { ChatState } from '../../Context/ChatProvider';
 
 
 const Login = () => {
@@ -13,7 +14,7 @@ const Login = () => {
     const toast = useToast();
     const history = useHistory();
     const handlePasswordShow = ()=> setShowPassword(!showPassword)
-
+    const {setUser} = ChatState();
 
     const submitHandler = async()=>{
         setLoading(true);
@@ -46,6 +47,7 @@ const Login = () => {
             });
 
             localStorage.setItem("userInfo",JSON.stringify(data));
+            setUser(data);
             setLoading(false);
             history.push("/chats")
         }catch(error){

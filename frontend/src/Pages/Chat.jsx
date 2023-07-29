@@ -7,12 +7,8 @@ import ChatBox from '../components/ChatBox';
 
 
 const Chat = () => {
-  const [fetchAgain, setFetchAgain]=useState(true);
+  const [fetchAgain, setFetchAgain]=useState(false);
   const {user} = ChatState();
-
-  useEffect(()=>{
-    console.log("User: ",user)
-  },[])
     
   return (
     <div style={{width:"100%"}}> 

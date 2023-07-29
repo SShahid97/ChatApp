@@ -51,7 +51,6 @@ const SideDrawer = () => {
         }
 
         const {data} = await APIClient.get(`/api/user?search=${search} `,config)
-       console.log(data);
         setLoading(false);
         setSearchResult(data);
     } catch (error) {

@@ -9,6 +9,7 @@ const Home = () => {
 
   useEffect(()=>{
       const user = JSON.parse(localStorage.getItem("userInfo"));
+      console.log("user: ", user)
       if(user){
           history.push("/chats") ; 
       }
