@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { ChatState } from "../Context/ChatProvider";
-import { Box, Button, Spinner, Stack, Text, useToast } from "@chakra-ui/react";
+import { Avatar, Box, Button, Spinner, Stack, Text, useToast } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
 import ChatLoading from "./ChatLoading";
-import { getSenderName } from "../config/ChatLogics";
+import { getSender, getSenderName } from "../config/ChatLogics";
 import GroupChatModal from "./Miscellaneous/GroupChatModal";
 import { APIClient } from "../service/ApiClient";
 
@@ -92,15 +92,33 @@ const MyChats = ({fetchAgain}) => {
             {chats.map((chat) => {
               return (
                 <Box
+                  style={{display:"flex", alignItems:"center"}}
                   onClick={() => setSelectedChat(chat)}
                   cursor={"pointer"}
                   bg={selectedChat === chat ? "#38B2AC" : "#E8E8E8"}
                   color={selectedChat === chat ? "white" : "black"}
-                  px={3}
-                  py={2}
+                  px={2}
+                  py={1}
                   borderRadius={"lg"}
                   key={chat._id}
                 >
+                  {!chat.isGroupChat ?
+                    <Avatar
+                    p={1} 
+                    mr={2}
+                    size="md"
+                    cursor={"pointer"}
+                    src={getSender(loggedUser, chat.users).pic}
+                  />:
+                  <>
+                    <Avatar
+                    p={1}
+                    mr={2}
+                    size="md"
+                  />
+                  </>
+                  }
+                  
                   <Text>
                     {!chat.isGroupChat
                       ? getSenderName(loggedUser, chat.users)

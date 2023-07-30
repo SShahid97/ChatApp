@@ -14,7 +14,11 @@ const app = express();
 dotenv.config()
 connectDB();
 
-app.use(cors({ origin: 'http://localhost:3000' }));
+app.use(cors({ 
+    origin: 'http://localhost:3000' 
+    // origin: 'https://touching-caribou-strictly.ngrok-free.app' 
+
+}));
 
 app.use(express.json()); //to accept json data
 
@@ -53,7 +57,7 @@ const io = require('socket.io')(server,{
     pingTimeOut: 60000,
     cors: {
         origin:'http://localhost:3000',
-        // origin: "https://bc01-117-210-145-79.ngrok-free.app",
+        // origin: "https://touching-caribou-strictly.ngrok-free.app",
     }
 });
 

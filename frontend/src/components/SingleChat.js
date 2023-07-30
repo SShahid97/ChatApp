@@ -14,7 +14,7 @@ import animationData from "../animations/typing.json";
 import io from "socket.io-client"
 
 const ENDPOINT = "http://localhost:5000";
-// const ENDPOINT = "https://d168-117-210-145-79.ngrok-free.app";
+// const ENDPOINT = "https://940b-117-210-156-156.ngrok-free.app";
 // const ENDPOINT = process.env.REACT_APP_BACK_END_BASE_URL
 var socket, selectedChatCompare;
 
@@ -159,8 +159,8 @@ const SingleChat = ({fetchAgain, setFetchAgain}) => {
         {selectedChat ? (<>
             <Text
                 fontSize={{base:"28px", md:"30px"}}
-                pb={3}
-                px={2}
+                // pb={3}
+                // px={2}
                 w="100%"
                 fontFamily={"Work sans"}
                 display={"flex"}
@@ -175,7 +175,8 @@ const SingleChat = ({fetchAgain, setFetchAgain}) => {
                 {!selectedChat.isGroupChat 
                 ? (<>
                      <div style={{display:"flex", justifyContent:"center", alignItems:"center"}}>
-                        <Avatar 
+                        <Avatar
+                            p={1} 
                             mr={2}
                             size="md"
                             cursor={"pointer"}
@@ -228,20 +229,20 @@ const SingleChat = ({fetchAgain, setFetchAgain}) => {
                         {/* messages */}
                         <ScrollableChat messages={messages} />
                     </div>
-
-                    <FormControl  
-                    // onKeyDown={sendMessage} 
-                    isRequired mt={3} 
-                    style={{display:"flex"}} >
-                        {isTyping ? 
+                    {isTyping ? 
                         <div>
                             <Lottie 
                                 options={defaultOptions}
                                 width={70}
-                                style={{marginBottom:15, marginLeft:0}}
+                                style={{margin: 0}}
                             /> 
                         </div> 
                         :<></> }
+                    <FormControl  
+                    // onKeyDown={sendMessage} 
+                    isRequired mt={3} 
+                    style={{display:"flex"}} >
+                       
                         <Input
                             style={{backgroundColor:"white", width:"100%"}} 
 
@@ -256,7 +257,7 @@ const SingleChat = ({fetchAgain, setFetchAgain}) => {
                             background: '#38B2AC', // Change the background color on hover.
                         }} 
                         display={{base:"flex"}}
-                        width={{sm:"20%", md: "10%", lg:"5%" }}
+                        width={{sm:"10%", md: "10%", lg:"5%" }}
                         style={{ position:"absolute", right:"0px", padding:"2px 3px", borderBottomLeftRadius:"0px",borderTopLeftRadius:"0px"}}
                         icon={<ChevronRightIcon/>}
                         onClick={sendMessage}

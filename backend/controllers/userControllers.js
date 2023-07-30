@@ -55,6 +55,27 @@ const authUser = asyncHandler(async(req, res)=>{
     }
 })
 
+
+// update user
+const updateUser = asyncHandler (async(req,res)=>{
+    const userId = req.params._id;
+    console.log("userId: ", userId)
+
+    const updatedUser = await User.findByIdAndUpdate(
+    userId, req.body,
+      {
+        new:true
+      }
+    );
+    if(!updatedUser){
+      res.status(404);
+      throw new Error("User not found");
+    }else{
+      res.json(updatedUser)
+    }
+  });
+  
+
 //api/users?search=shahid
 const allUsers = asyncHandler( async (req, res)=>{
     const keyword = req.query.search ? {
@@ -70,4 +91,4 @@ const allUsers = asyncHandler( async (req, res)=>{
    res.send(users);
    
 });
-module.exports = {registerUser,authUser,allUsers};
+module.exports = {registerUser,authUser,allUsers,updateUser};
