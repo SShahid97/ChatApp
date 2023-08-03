@@ -36,6 +36,8 @@ export const getMonthName = (monthNumber, type)=>{
             break;
         case 11:
             month = type === "full" ? "December": "Dec";
+            break;
+        default:
             break;    
     }
     
@@ -66,6 +68,8 @@ export const getDayName = (day)=>{
           break;
        case 6:
           dayName = "Saturday";
+          break;
+       default:
           break;
     }
     return dayName;

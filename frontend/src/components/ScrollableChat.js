@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import ScrollableFeed from "react-scrollable-feed";
 import { isLastMessage, isSameSender, isSameSenderMargin, isSameUser } from "../config/ChatLogics";
 import { Avatar, Tooltip } from "@chakra-ui/react";
@@ -6,6 +6,9 @@ import { ChatState } from "../Context/ChatProvider";
 import { getDayName, getMonthName } from "../service/dateTimeConversions";
 const ScrollableChat = ({ messages }) => {
   const { user } = ChatState();
+  let prevDate = null;
+  let showDay = false;
+
   console.log("message: ",messages);
   const formatAMPM = (date) => {
     var hours = date.getHours();
@@ -18,6 +21,7 @@ const ScrollableChat = ({ messages }) => {
     return strTime;
   }
 
+
  
   return (
     <ScrollableFeed>
@@ -26,19 +30,45 @@ const ScrollableChat = ({ messages }) => {
           const d = message.createdAt;
           const date = new Date(d);
           const timeToDisplay = formatAMPM(date);
-
+          console.log("messages: ", messages[index>0?index-1:index]);
+          if(prevDate !== null) {
+            if( date.getDate() !== prevDate.getDate()){
+              showDay=true;
+            }else{
+              showDay=false;
+            }
+          }
+          prevDate = date;
           return (
           <>
-            <div style={{display:"flex", justifyContent:"center", fontSize:"10px"}}>
+           {
+            //index is used for displaying date for first message
+            //because showDay will not display for first message as in the first iteration prevDate is null
+            showDay || index===0 ? (   
+              <div style={{display:"flex", justifyContent:"center", fontSize:"11px"}}>
               <div style={{
                 borderRadius: "5px",
                 padding: "2px 5px",
                 backgroundColor:"rgb(218 255 232)",
-                margin:"3px 0px"
+                margin:"3px 0px",
+                color:"grey"
               }}>
-                {getDayName(date.getDay())} {getMonthName(date.getMonth(),"full")}, {date.getDate()}/{date.getFullYear()} 
+                {
+                  getDayName(new Date().getDay()) ===  getDayName(date.getDay()) ? 
+                  "Today" :
+                  getDayName(new Date().getDay() - 1) ===  getDayName(date.getDay()) ? 
+                   "Yesterday"
+                   :(
+                    <>
+                       {getDayName(date.getDay())} {getMonthName(date.getMonth(),"full")}, {date.getDate()}/{date.getFullYear()} 
+                    </>
+                  )
+                }
+               
               </div>
             </div>
+            ):(<></>)
+           }
             <div style={{ display: "flex" }} key={message._id}>
               {(isSameSender(messages, message, index, user._id) ||
                 isLastMessage(messages, index, user._id)) && (
